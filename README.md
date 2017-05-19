@@ -12,12 +12,13 @@ cd tiny-png
 
 ## Usage
 
-After clone `tiny-png`, change `tinify.key.template` to `tinify.key` and paste your **tinify key** in it. Then start to compress the images in `target_directory`:
+- After clone `tiny-png`, change `tinify.key.template` to `tinify.key`
+- Paste your **tinify key** in it. Then start to compress the images in `target_directory`
 ```
 python compress.py <target_directory>
 ```
 
-**IMPORTANT:** This will replace all the `*.jpg|*.png` images in that target directory.
+**IMPORTANT:** The script will replace all the `*.jpg|*.png` images in the target directory.
 
 ## Powered By:
 - [https://tinypng.com/](https://tinypng.com/)
