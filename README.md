@@ -15,10 +15,11 @@ cd tiny-png
 - After clone `tiny-png`, change `tinify.key.template` to `tinify.key`
 - Paste your **tinify key** in it. Then start to compress the images in `target_directory` recursively
 ```
+python compress.py <target_image>
 python compress.py <target_directory>
 ```
 
-**IMPORTANT:** The script will replace all the case insensitive `*.jpg|*.jpeg|*.png` images in the target directory.
+**IMPORTANT:** The script will compress all case insensitive `*.jpg|*.jpeg|*.png` target image or images in target directory recursively.
 
 ## Powered By:
 - [https://tinypng.com/](https://tinypng.com/)
