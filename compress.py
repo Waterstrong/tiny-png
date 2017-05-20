@@ -37,7 +37,8 @@ def compress_images(root_dir, recursively):
 
 def tinify_image(path, tinified_cache):
     print 'Start compressing image:', path
-    if (path + '\n') not in tinified_cache:
+    basename = os.path.basename(path) + '\n'
+    if basename not in tinified_cache:
         with Image.open(path) as image:
             (width, height) = image.size
             if ENABLE_RESIZING and height > MAX_HEIGHT and width > MAX_HEIGHT:
@@ -45,7 +46,7 @@ def tinify_image(path, tinified_cache):
             else:
                 tinify.from_file(path).to_file(path)
         with open(get_cache_file(path), 'a') as file:
-            file.write(path + '\n')
+            file.write(basename)
             print 'Compression done!\n'
     else:
         print 'Compression ignored. Found record in \'{}\'.\n'.format(TINIFY_CACHE_FILE)
