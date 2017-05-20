@@ -3,6 +3,7 @@ import sys
 import re
 import tinify
 
+FREE_NUMBER_MONTHLY = 500
 IMAGE_PATTERN = re.compile('.*\.(jpg$|jpeg$|png$)', re.I)
 
 def load_tinify_key(key_file):
@@ -22,13 +23,13 @@ def compress_images(root_dir, recursively):
                 print 'Subdirectory scanning ignored:', path
         elif IMAGE_PATTERN.match(path):
             print 'Start compressing image:', path
-            # tinify.from_file(path).to_file(path)
+            tinify.from_file(path).to_file(path)
             print 'Compression done!\n'
 
 
 def show_compressed_count():
     if tinify.compression_count is not None:
-        print 'You have already used', tinify.compression_count, 'number of compressions this month.'
+        print 'You have already used', tinify.compression_count, '/', FREE_NUMBER_MONTHLY, 'free number of compressions this month.'
     else:
         print '**Warning:**\n   Nothing to compress in the directory.'
 
