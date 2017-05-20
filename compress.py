@@ -1,7 +1,14 @@
 import os
-import sys
 import re
+import sys
 import tinify
+from PIL import Image
+
+ENABLE_RECURSIVELY_SCAN = True
+
+ENABLE_RESIZING = False
+MAX_HEIGHT = 1200
+RESIZE_HEIGHT = 1000
 
 FREE_NUMBER_MONTHLY = 500
 TINIFY_KEY_FILE = 'tinify.key'
@@ -31,7 +38,12 @@ def compress_images(root_dir, recursively):
 def tinify_image(path, tinified_cache):
     print 'Start compressing image:', path
     if (path + '\n') not in tinified_cache:
-        tinify.from_file(path).to_file(path)
+        with Image.open(path) as image:
+            (width, height) = image.size
+            if ENABLE_RESIZING and height > MAX_HEIGHT and width > MAX_HEIGHT:
+                tinify.from_file(path).resize(method="scale", height=RESIZE_HEIGHT).to_file(path)
+            else:
+                tinify.from_file(path).to_file(path)
         with open(get_cache_file(path), 'a') as file:
             file.write(path + '\n')
             print 'Compression done!\n'
@@ -54,8 +66,7 @@ def get_cache_file(path):
 
 def show_compressed_count():
     if tinify.compression_count is not None:
-        print 'You have already used {}/{} free number of compressions this month.\n'.format(tinify.compression_count,
-                                                                                             FREE_NUMBER_MONTHLY)
+        print 'You have already used {}/{} free number of compressions this month.\n'.format(tinify.compression_count, FREE_NUMBER_MONTHLY)
     else:
         print '**Warning:**\n   Nothing to compress in the directory.'
 
@@ -78,7 +89,7 @@ if len(sys.argv) == 2:
     if os.path.isdir(input_path):
         load_tinify_key()
         confirm_compression(input_path)
-        compress_images(input_path, True)
+        compress_images(input_path, ENABLE_RECURSIVELY_SCAN)
         show_compressed_count()
     elif IMAGE_PATTERN.match(input_path):
         load_tinify_key()
@@ -88,6 +99,3 @@ if len(sys.argv) == 2:
         output_help()
 else:
     output_help()
-
-
-    # TODO: resizing width and height?

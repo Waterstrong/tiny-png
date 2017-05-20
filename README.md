@@ -4,6 +4,7 @@ To compress and optimize JPEG and PNG images with [Tinify API in Python](https:/
 ## Installation
 ```
 pip install --upgrade tinify
+pip install image
 
 git clone https://github.com/Waterstrong/tiny-png.git
 
