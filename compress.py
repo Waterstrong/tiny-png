@@ -6,9 +6,9 @@ from PIL import Image
 
 ENABLE_RECURSIVELY_SCAN = True
 
-ENABLE_RESIZING = False
-MAX_HEIGHT = 1200
-RESIZE_HEIGHT = 1000
+ENABLE_RESIZING = True
+MAX_HEIGHT = 1366
+RESIZE_HEIGHT = 1080
 
 FREE_NUMBER_MONTHLY = 500
 TINIFY_KEY_FILE = 'tinify.key'
@@ -92,7 +92,7 @@ if len(sys.argv) == 2:
         confirm_compression(input_path)
         compress_images(input_path, ENABLE_RECURSIVELY_SCAN)
         show_compressed_count()
-    elif IMAGE_PATTERN.match(input_path):
+    elif IMAGE_PATTERN.match(input_path) and os.path.exists(input_path):
         load_tinify_key()
         tinify_image(input_path, load_tinified_cache(input_path))
         show_compressed_count()
