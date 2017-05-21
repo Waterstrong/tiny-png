@@ -4,6 +4,7 @@ import sys
 import tinify
 from PIL import Image
 from datetime import datetime
+import timeit
 
 ENABLE_RECURSIVELY_SCAN = True
 
@@ -45,6 +46,7 @@ def load_tinify_key():
     with open(TINIFY_KEY_FILE, 'r') as file:
         tinify.key = file.read()
 
+
 def compress_directory_images(input_path):
     target_images = scan_target_images(input_path, ENABLE_RECURSIVELY_SCAN)
     confirm_compression(input_path, len(target_images))
@@ -65,14 +67,19 @@ def compress_target_image(input_path):
 def compress_images(target_images):
     current = 0
     total_number = len(target_images)
+    total_time = 0
     for image_file in target_images:
         current += 1
         write_log('Start compressing image: {}'.format(image_file))
         if os.path.exists(image_file):
+            time_start = timeit.default_timer()
             tinify_image(image_file)
-            write_log('Compression done! ({}/{})\n'.format(current, total_number))
+            time_diff = round(timeit.default_timer() - time_start, 2)
+            total_time += time_diff
+            write_log('Compression done takes {} seconds! ({}/{})\n'.format(time_diff, current, total_number))
         else:
             write_log('Ignored: target image does not exist! ({}/{})\n'.format(current, total_number))
+    write_log('Totally takes {} seconds to complete!'.format(total_time))
 
 
 def tinify_image(image_file):
@@ -95,8 +102,10 @@ def load_tinified_cache(path):
     with open(cache_path, 'r') as file:
         return file.readlines()
 
+
 def get_cache_key(path):
     return os.path.basename(path) + '\n'
+
 
 def get_cache_file(image_path):
     parent_path = os.path.isdir(image_path) and image_path or os.path.dirname(image_path)
