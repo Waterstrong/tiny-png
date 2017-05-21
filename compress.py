@@ -1,10 +1,10 @@
 import os
 import re
 import sys
+import timeit
 import tinify
 from PIL import Image
 from datetime import datetime
-import timeit
 
 ENABLE_RECURSIVELY_SCAN = True
 
@@ -79,7 +79,8 @@ def compress_images(target_images):
             write_log('Compression done takes {} seconds! ({}/{})\n'.format(time_diff, current, total_number))
         else:
             write_log('Ignored: target image does not exist! ({}/{})\n'.format(current, total_number))
-    write_log('Totally takes {} seconds to complete!'.format(total_time))
+    if total_time > 0:
+        write_log('Totally takes {} seconds to complete!'.format(total_time))
 
 
 def tinify_image(image_file):
@@ -116,7 +117,7 @@ def show_compressed_count():
     if tinify.compression_count is not None:
         write_log('You have already used {}/{} free number of compressions this month.\n'.format(tinify.compression_count, FREE_NUMBER_MONTHLY))
     else:
-        write_log('**Warning:**\n   Nothing to compress in the directory.\n')
+        write_log('**Warning**: Nothing to compress in the directory!\n')
 
 
 def confirm_compression(path, number):
