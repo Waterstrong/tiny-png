@@ -86,12 +86,13 @@ def compress_images(target_images):
 def tinify_image(image_file):
     with Image.open(image_file) as image:
         (width, height) = image.size
+        write_log('  - Compressing... Original image dimensions: {} x {}'.format(width, height))
         if ENABLE_RESIZING and height > MAX_HEIGHT and width > MAX_HEIGHT:
+            scaled_width = width * RESIZE_HEIGHT / height
+            write_log('  - Exceed max {} x {}. Scaling to new dimensions: {} x {}'.format(MAX_HEIGHT, MAX_HEIGHT, scaled_width, RESIZE_HEIGHT))
             tinify.from_file(image_file).resize(method="scale", height=RESIZE_HEIGHT).to_file(image_file)
-            pass
         else:
             tinify.from_file(image_file).to_file(image_file)
-            pass
     with open(get_cache_file(image_file), 'a') as file:
         file.write(get_cache_key(image_file) + '\n')
 
