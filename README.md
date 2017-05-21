@@ -20,7 +20,18 @@ python compress.py <target_image>
 python compress.py <target_directory>
 ```
 
+Checkout the cache file `.tinify.cache` in each target directory. It can prevent duplicated compression.
+
+Checkout the log file `tinify.log` in current `compress.py` execution directory for compression details.
+
 **IMPORTANT:** The script will compress all case insensitive `*.jpg|*.jpeg|*.png` target image or images in target directory recursively.
+
+## Results
+#### Before Compression
+![Before Compression](img/before_compress.png)
+
+#### After Compression:
+![After Compression](img/after_compress.png)
 
 ## Powered By:
 - [https://tinypng.com/](https://tinypng.com/)

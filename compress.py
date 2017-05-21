@@ -94,7 +94,7 @@ def tinify_image(image_file):
         else:
             tinify.from_file(image_file).to_file(image_file)
     with open(get_cache_file(image_file), 'a') as file:
-        file.write(get_cache_key(image_file) + '\n')
+        file.write(get_cache_key(image_file))
 
 
 def load_tinified_cache(path):
