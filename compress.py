@@ -29,13 +29,13 @@ def scan_target_images(root_dir, recursively):
             if recursively:
                 target_images.extend(scan_target_images(path, recursively))
             else:
-                write_log('Subdirectory scanning ignored: {}'.format(path))
+                print 'Subdirectory scanning ignored: {}'.format(path)
         elif IMAGE_PATTERN.match(path):
             if get_cache_key(file) not in tinified_cache:
                 target_images.append(path)
                 write_log('Scanned image: {}'.format(path))
             else:
-                write_log('Image ignored: {}. Found record in \'{}\'.'.format(path, TINIFY_CACHE_FILE))
+                print 'Image ignored: {}. Found record in \'{}\'.'.format(path, TINIFY_CACHE_FILE)
     image_number = len(target_images)
     write_log('Found {} target {} in directory {}\n'.format(image_number, image_number > 1 and 'images' or 'image', root_dir))
     return target_images
