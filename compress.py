@@ -1,4 +1,5 @@
 import os
+from os.path import realpath
 import re
 import sys
 import timeit
@@ -13,14 +14,15 @@ MAX_HEIGHT = 1366
 RESIZE_HEIGHT = 1080
 
 FREE_NUMBER_MONTHLY = 500
-TINIFY_KEY_FILE = 'tinify.key'
+SCRIPT_DIR = os.path.split(realpath(__file__))[0]
+TINIFY_KEY_FILE = os.path.join(SCRIPT_DIR, 'tinify.key')
+TINIFY_LOG_FILE = os.path.join(SCRIPT_DIR, 'tinify.log')
 TINIFY_CACHE_FILE = '.tinify.cache'
-TINIFY_LOG_FILE = 'tinify.log'
 IMAGE_PATTERN = re.compile('.*\.(jpg$|jpeg$|png$)', re.I)
-
+COMMAND = 'tinypng'
 
 def scan_target_images(root_dir, recursively):
-    write_log('Scanning directory: {}'.format(root_dir))
+    write_log('Scanning directory: {}'.format(realpath(root_dir)))
     tinified_cache = load_tinified_cache(root_dir)
     target_images = []
     for file in os.listdir(root_dir):
@@ -29,15 +31,15 @@ def scan_target_images(root_dir, recursively):
             if recursively:
                 target_images.extend(scan_target_images(path, recursively))
             else:
-                print 'Subdirectory scanning ignored: {}'.format(path)
+                print '> Subdirectory scanning ignored: {}'.format(realpath(path))
         elif IMAGE_PATTERN.match(path):
             if get_cache_key(file) not in tinified_cache:
                 target_images.append(path)
-                write_log('Scanned image: {}'.format(path))
+                write_log('Scanned image: {}'.format(realpath(path)))
             else:
-                print 'Image ignored: {}. Found record in \'{}\'.'.format(path, TINIFY_CACHE_FILE)
+                print '> Image ignored: {}. Found record in \'{}\'.'.format(realpath(path), TINIFY_CACHE_FILE)
     image_number = len(target_images)
-    write_log('Found {} target {} in directory {}\n'.format(image_number, image_number > 1 and 'images' or 'image', root_dir))
+    write_log('Found {} target {} in directory \'{}\'\n'.format(image_number, image_number > 1 and 'images' or 'image', realpath(root_dir)))
     return target_images
 
 
@@ -60,7 +62,7 @@ def compress_target_image(input_path):
         compress_images([input_path])
         show_compressed_count()
     else:
-        write_log('Start compressing image: {}'.format(input_path))
+        write_log('Start compressing image: {}'.format(realpath(input_path)))
         write_log('Compression ignored (1/1). Found record in \'{}\'.\n'.format(TINIFY_CACHE_FILE))
 
 
@@ -70,7 +72,7 @@ def compress_images(target_images):
     total_time = 0
     for image_file in target_images:
         current += 1
-        write_log('Start compressing image: {}'.format(image_file))
+        write_log('Start compressing image: {}'.format(realpath(image_file)))
         if os.path.exists(image_file):
             time_start = timeit.default_timer()
             tinify_image(image_file)
@@ -123,33 +125,38 @@ def show_compressed_count():
 
 def confirm_compression(path, number):
     if number > 0:
-        input = raw_input('Are you sure to compress all {} images under:\n  {}\n(y or n ?): '.format(number, path))
+        input = raw_input('Are you sure to compress all {} images under:\n    {}\n(y or n ?): '.format(number, realpath(path)))
         if input == 'y':
             load_tinify_key()
         else:
-            write_log('Compression aborted!\n')
+            write_log('Compression aborted with confirmation!\n')
             sys.exit()
 
 
 def write_log(message):
-    print message
+    print '>', message
     with open(TINIFY_LOG_FILE, 'a') as file:
-        file.write('{} {}\n'.format(datetime.now(), message))
+        file.write('> {} {}\n'.format(datetime.now(), message))
 
 
 def output_help():
-    print 'The script will compress all case insensitive \'*.jpg|*.jpeg|*.png\' target image or images in target directory recursively'
-    print 'Usage:\n  python', sys.argv[0], '<target_image>\n', '  python', sys.argv[0], '<target_directory>\n'
-    print 'GitHub: https://github.com/waterstrong/tiny-png'
+    print '\nThe TinyPNG script can compress all case insensitive \'*.jpg|*.jpeg|*.png\' target image or images in target directory recursively.'
+    print '\nUsage:'
+    print '  ', COMMAND, ' <target_image>'
+    print '  ', COMMAND, ' <target_directory>'
+    print '\nGitHub Repo: https://github.com/waterstrong/tiny-png\n'
 
-
-if len(sys.argv) == 2:
-    input_path = sys.argv[1]
-    if os.path.isdir(input_path):
-        compress_directory_images(input_path)
-    elif IMAGE_PATTERN.match(input_path) and os.path.exists(input_path):
-        compress_target_image(input_path)
+def main():
+    if len(sys.argv) == 2:
+        input_path = sys.argv[1]
+        if os.path.isdir(input_path):
+            compress_directory_images(input_path)
+        elif IMAGE_PATTERN.match(input_path) and os.path.exists(input_path):
+            compress_target_image(input_path)
+        else:
+            output_help()
     else:
         output_help()
-else:
-    output_help()
+
+
+main()

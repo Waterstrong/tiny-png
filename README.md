@@ -1,28 +1,27 @@
 # tiny-png
 To compress and optimize JPEG and PNG images with [Tinify API in Python](https://tinypng.com/developers/reference/python).
 
-## Installation
-```
-pip install --upgrade tinify
-pip install image
+## Installation and Setup (Mac OS supported only)
 
-git clone https://github.com/Waterstrong/tiny-png.git
+1. Clone the project: `git clone https://github.com/Waterstrong/tiny-png.git` 
 
-cd tiny-png
-```
+2. Execute the `install.sh` script and follow the instructions to complete the whole process
+
+3. Pay attention to the Tinify Key in `tinify.key`
+
 
 ## Usage
 
-- After clone `tiny-png`, change `tinify.key.template` to `tinify.key`
-- Paste your **tinify key** in it. Then start to compress the images in `target_directory` recursively
+The TinyPNG script can compress all case insensitive `*.jpg|*.jpeg|*.png` target image or images in target directory recursively.
 ```
-python compress.py <target_image>
-python compress.py <target_directory>
+Usage:
+   tinypng  <target_image>
+   tinypng  <target_directory>
 ```
 
 Checkout the cache file `.tinify.cache` in each target directory. It can prevent duplicated compression.
 
-Checkout the log file `tinify.log` in current `compress.py` execution directory for compression details.
+Checkout the log file `<your_dir>/tiny-png/tinify.log` for compression details log.
 
 **IMPORTANT:** The script will compress all case insensitive `*.jpg|*.jpeg|*.png` target image or images in target directory recursively.
 
