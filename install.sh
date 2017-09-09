@@ -5,6 +5,12 @@ TINY_PNG_FILE=${PWD}/tinypng.sh
 TINIFY_KEY_FILE=tinify.key
 TINIFY_PAGE=https://tinypng.com/dashboard/developers
 
+pip_install_modules() {
+echo '> Installing tinify and image modules in background...'
+    pip install --upgrade tinify >/dev/null 2>&1 &
+    pip install image >/dev/null 2>&1 &
+}
+
 add_tiny_png_symbol_link() {
     echo "> Adding symbol link '${SYMBOL_LINK} -> ${TINY_PNG_FILE}'..."
     ln -sf "${TINY_PNG_FILE}" "${SYMBOL_LINK}"
@@ -33,8 +39,7 @@ edit_tinify_key_file() {
 }
 
 main() {
-    pip install --upgrade tinify
-    pip install image
+    pip_install_modules
     add_tiny_png_symbol_link
     edit_tinify_key_file
     echo "> Tiny PNG installed. Type 'tinypng help' for more details. Enjoy!\n"
