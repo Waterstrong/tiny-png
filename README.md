@@ -15,6 +15,8 @@ To compress and optimize JPEG and PNG images with [Tinify API in Python](https:/
 The TinyPNG script can compress all case insensitive `*.jpg|*.jpeg|*.png` target image or images in target directory recursively.
 ```
 Usage:
+   tinypng  help
+   tinypng  upgrade
    tinypng  <target_image>
    tinypng  <target_directory>
 ```
