@@ -16,7 +16,6 @@ The TinyPNG script can compress all case insensitive `*.jpg|*.jpeg|*.png` target
 ```
 Usage:
    tinypng  help
-   tinypng  upgrade
    tinypng  <target_image>
    tinypng  <target_directory>
 ```

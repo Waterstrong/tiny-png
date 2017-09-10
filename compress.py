@@ -143,7 +143,6 @@ def output_help():
     print '\nThe TinyPNG script can compress all case insensitive \'*.jpg|*.jpeg|*.png\' target image or images in target directory recursively.'
     print '\nUsage:'
     print '  ', COMMAND, ' help'
-    print '  ', COMMAND, ' upgrade'
     print '  ', COMMAND, ' <target_image>'
     print '  ', COMMAND, ' <target_directory>'
     print '\nGitHub Repo: https://github.com/waterstrong/tiny-png\n'
