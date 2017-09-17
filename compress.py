@@ -1,3 +1,9 @@
+#
+# I'm not familiar with Python. Not using OOP in Python.
+# This bad code definitely should be refactored!
+# It's not my high priority. So just leave it for now.
+#
+
 import os
 from os.path import realpath
 import re
@@ -26,21 +32,27 @@ def scan_target_images(root_dir, recursively):
     tinified_cache = load_tinified_cache(root_dir)
     target_images = []
     for file in os.listdir(root_dir):
-        path = os.path.join(root_dir, file)
-        if os.path.isdir(path):
-            if recursively:
-                target_images.extend(scan_target_images(path, recursively))
-            else:
-                print '> Subdirectory scanning ignored: {}'.format(realpath(path))
-        elif IMAGE_PATTERN.match(path):
-            if get_cache_key(file) not in tinified_cache:
-                target_images.append(path)
-                write_log('Scanned image: {}'.format(realpath(path)))
-            else:
-                print '> Image ignored: {}. Found record in \'{}\'.'.format(realpath(path), TINIFY_CACHE_FILE)
+        target_image = scan_target_image(root_dir, file, tinified_cache, recursively)
+        if target_image is not None:
+            target_images.extend(target_image)
     image_number = len(target_images)
     write_log('Found {} target {} in directory \'{}\'\n'.format(image_number, image_number > 1 and 'images' or 'image', realpath(root_dir)))
     return target_images
+
+
+def scan_target_image(root_dir, file, tinified_cache, recursively):
+    path = os.path.join(root_dir, file)
+    if os.path.isdir(path):
+        if recursively:
+            return scan_target_images(path, recursively)
+        else:
+            print '> Subdirectory scanning ignored: {}'.format(realpath(path))
+    elif IMAGE_PATTERN.match(path):
+        if get_cache_key(file) not in tinified_cache:
+            write_log('Scanned image: {}'.format(realpath(path)))
+            return path
+        else:
+            print '> Image ignored: {}. Found record in \'{}\'.'.format(realpath(path), TINIFY_CACHE_FILE)
 
 
 def load_tinify_key():
@@ -145,7 +157,8 @@ def output_help():
     print '  ', COMMAND, ' help'
     print '  ', COMMAND, ' <target_image>'
     print '  ', COMMAND, ' <target_directory>'
-    print '\nGitHub Repo: https://github.com/waterstrong/tiny-png\n'
+    print '\nHome Directory: ', SCRIPT_DIR
+    print 'GitHub Repository: https://github.com/waterstrong/tiny-png\n'
 
 def main():
     if len(sys.argv) == 2:
