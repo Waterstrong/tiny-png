@@ -10,8 +10,8 @@ from datetime import datetime
 ENABLE_RECURSIVELY_SCAN = True
 
 ENABLE_RESIZING = True
-MAX_HEIGHT = 1366
-RESIZE_HEIGHT = 1080
+MAX_HEIGHT = 13660
+RESIZE_HEIGHT = 10800
 
 FREE_NUMBER_MONTHLY = 500
 SCRIPT_DIR = os.path.split(realpath(__file__))[0]
